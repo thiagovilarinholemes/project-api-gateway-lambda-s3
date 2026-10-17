@@ -1,0 +1,32 @@
+services:
+
+  localstack:
+    image: localstack/localstack:latest
+
+    container_name: localstack-serverless
+
+    ports:
+      - "4566:4566"
+
+    
+
+    environment:
+      # Serviços que utilizaremos neste laboratório.
+      SERVICES: s3,lambda,apigateway,iam,sts      
+      AWS_DEFAULT_REGION: us-east-1 # Região padrão.
+      # Logs adicionais.
+      DEBUG: ${DEBUG:-0}
+      TZ: ${TZ}
+    
+    env_file:
+      - ./.env
+
+    volumes:
+      # Permite ao LocalStack utilizar o Docker
+      # para executar Lambdas.
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # Persistência do ambiente local.
+      - "localstack_data:/var/lib/localstack"
+
+volumes:
+  localstack_data:
